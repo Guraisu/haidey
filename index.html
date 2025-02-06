@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Untukmu</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom right, #ff6b6b, #f06595);
+            color: white;
+            overflow: hidden;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: auto;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
+        }
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+        button {
+            padding: 15px 30px;
+            border: none;
+            background-color: #fff;
+            color: #ff6b6b;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Animasi bubble */
+        .background-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: floatUp 5s infinite ease-in;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(-50vh) scale(1.2); }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-bubbles"></div>
+    <div class="container">
+        <h2>Hai Dey, Aku Punya Sesuatu Untukmu...</h2>
+        <p id="message">Klik tombol di bawah ini untuk membaca lebih lanjut.</p>
+        <button id="nextButton" onclick="showMessage()">Lanjut</button>
+    </div>
+
+    <script>
+        let messages = [
+            "Aku ingin berbicara tentang sesuatu yang penting...",
+            "Sebenarnya, ini sudah lama ada dalam pikiranku...",
+            "Aku ingin lebih mengenalmu, karena kamu begitu spesial...",
+            "Setiap kali kita berbicara, aku merasa sangat nyaman...",
+            "Aku ingin kamu tahu bahwa aku menyukaimu."
+        ];
+        let index = 0;
+        let messageElement = document.getElementById('message');
+        let buttonElement = document.getElementById('nextButton');
+
+        function showMessage() {
+            if (index < messages.length) {
+                messageElement.style.opacity = 0;
+                setTimeout(() => {
+                    messageElement.innerText = messages[index];
+                    messageElement.style.opacity = 1;
+                    index++;
+                    if (index === messages.length) {
+                        buttonElement.style.display = 'none';
+                        setTimeout(() => {
+                            alert("Itulah yang ingin aku sampaikan. Terima kasih telah mendengarkan :)");
+                        }, 500);
+                    }
+                }, 500);
+            }
+        }
+        
+        function createBubbles() {
+            const bubbleContainer = document.querySelector('.background-bubbles');
+            setInterval(() => {
+                let bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                bubble.style.left = Math.random() * 100 + 'vw';
+                bubble.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                bubble.style.width = bubble.style.height = (Math.random() * 30 + 20) + 'px';
+                bubbleContainer.appendChild(bubble);
+
+                setTimeout(() => {
+                    bubble.remove();
+                }, 5000);
+            }, 500);
+        }
+        createBubbles();
+    </script>
+</body>
+</html>
