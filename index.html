@@ -17,23 +17,22 @@
             align-items: center;
             min-height: 100vh;
             position: relative;
+            padding: 20px;
         }
         .container {
             background: rgba(255, 255, 255, 0.2);
-            padding: 40px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
-            margin: auto;
+            max-width: 90%;
             backdrop-filter: blur(10px);
             position: relative;
             z-index: 10;
         }
         h2 {
-            font-size: 2em;
+            font-size: 1.8em;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            white-space: normal;
             word-wrap: break-word;
         }
         p {
@@ -43,24 +42,22 @@
             animation: fadeIn 1s ease-in-out forwards;
         }
         button {
-            padding: 15px 30px;
-            border: none;
-            background-color: #fff;
-            color: #ff6b6b;
+            padding: 10px 20px;
             font-size: 1.2em;
+            border: none;
             border-radius: 10px;
+            background-color: white;
+            color: #ff6b6b;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: 0.3s;
         }
         button:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            background-color: #ffe0e0;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
         /* Animasi bubble */
         .background-bubbles {
             position: absolute;
@@ -85,19 +82,35 @@
             50% { transform: translateY(-50vh) scale(1.2); }
             100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
         }
+        /* Tombol musik */
+        .music-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <button class="music-button" onclick="toggleMusic()">🎵</button>
+    
     <div class="background-bubbles"></div>
     <div class="container">
         <h2>Hai Dey, Aku Punya Sesuatu Untukmu...</h2>
-        <p id="message">Klik tombol di bawah ini untuk membaca lebih lanjut.</p>
-        <button id="nextButton" onclick="showMessage()">Lanjut</button>
+        <p id="message">Aku ingin berbicara tentang sesuatu yang penting...</p>
+        <button id="startButton" onclick="startMessages()">Lanjut</button>
     </div>
 
     <script>
         let messages = [
-            "Aku ingin berbicara tentang sesuatu yang penting...",
             "Sebenarnya, ini sudah lama ada dalam pikiranku...",
             "Aku ingin lebih mengenalmu, karena kamu begitu spesial...",
             "Setiap kali kita berbicara, aku merasa sangat nyaman...",
@@ -105,7 +118,12 @@
         ];
         let index = 0;
         let messageElement = document.getElementById('message');
-        let buttonElement = document.getElementById('nextButton');
+        let startButton = document.getElementById('startButton');
+
+        function startMessages() {
+            startButton.style.display = 'none';
+            setTimeout(showMessage, 3000);
+        }
 
         function showMessage() {
             if (index < messages.length) {
@@ -114,11 +132,12 @@
                     messageElement.innerText = messages[index];
                     messageElement.style.opacity = 1;
                     index++;
-                    if (index === messages.length) {
-                        buttonElement.style.display = 'none';
+                    if (index < messages.length) {
+                        setTimeout(showMessage, 3000);
+                    } else {
                         setTimeout(() => {
                             alert("Itulah yang ingin aku sampaikan. Terima kasih telah membaca :)");
-                        }, 500);
+                        }, 3000);
                     }
                 }, 500);
             }
@@ -140,6 +159,23 @@
             }, 500);
         }
         createBubbles();
+        
+        function toggleMusic() {
+            let music = document.getElementById('backgroundMusic');
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+
+        // Memastikan musik diputar saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            let music = document.getElementById('backgroundMusic');
+            music.play().catch(error => {
+                console.log("Autoplay was prevented. Please interact with the page to play the music.");
+            });
+        });
     </script>
 </body>
 </html>
