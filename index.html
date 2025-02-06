@@ -82,25 +82,25 @@
             50% { transform: translateY(-50vh) scale(1.2); }
             100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
         }
-        /* Tombol musik */
-        .music-button {
+        /* Animasi hati */
+        .heart {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border: none;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
+            top: -50px;
+            font-size: 30px;
+            color: #ff6b6b;
+            animation: fall 5s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <audio id="backgroundMusic" loop autoplay>
+    <audio id="backgroundMusic" loop>
         <source src="./assets/music/sound.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    <button class="music-button" onclick="toggleMusic()">🎵</button>
     
     <div class="background-bubbles"></div>
     <div class="container">
@@ -121,6 +121,10 @@
         let startButton = document.getElementById('startButton');
 
         function startMessages() {
+            let music = document.getElementById('backgroundMusic');
+            music.play().catch(error => {
+                console.log("Autoplay was prevented. Please interact with the page to play the music.");
+            });
             startButton.style.display = 'none';
             setTimeout(showMessage, 3000);
         }
@@ -160,22 +164,21 @@
         }
         createBubbles();
         
-        function toggleMusic() {
-            let music = document.getElementById('backgroundMusic');
-            if (music.paused) {
-                music.play();
-            } else {
-                music.pause();
-            }
-        }
+        function createHearts() {
+            setInterval(() => {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(heart);
 
-        // Memastikan musik diputar saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-            let music = document.getElementById('backgroundMusic');
-            music.play().catch(error => {
-                console.log("Autoplay was prevented. Please interact with the page to play the music.");
-            });
-        });
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 300);
+        }
+        createHearts();
     </script>
 </body>
 </html>
